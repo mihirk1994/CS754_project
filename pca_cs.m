@@ -1,6 +1,5 @@
-for m = 10:10:40
+for m=10:10:40
     projection = @(M) M * inv(M' * M )* M';  
-    
     p = 100;
     d=5;
     n=1000;
@@ -17,16 +16,24 @@ for m = 10:10:40
     %X = normrnd(0,1,p,n);
     E = normrnd(0,1,p,m,n);
     s=zeros(p,1);
+    C = zeros(p);
     for i=1:n
-        s = s + (projection(E(:,:,i) )*X(:,i));
+        px = (projection(E(:,:,i) )*X(:,i));
+        s = s + px;
+        C = C + px * px';
         %if (mod(i, 100) == 0)
         %    s/i
         %end
     end
     s=s/n;
+    C = C/n;
+    V_sig_V = C - (eps*eps*m/p)*eye(p);
+    [V_new , sig]= eig(V_sig_V);
     avg =  x_bar;
     avg = avg*m/p;
-    norm(avg-s)/norm(s)
+    err1 = norm(avg-s)/norm(avg);
+    err2 = dot(V_new(:,1),V(:,1))/(norm( V(:,1))*norm( V(:,1)))
+    
 end
  
  
