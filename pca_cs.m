@@ -1,9 +1,9 @@
-for m = 10:10:40
+function nce = pca_cs(m,n)
     projection = @(M) M * inv(M' * M )* M';  
     
     p = 100;
     d=5;
-    n=1000;
+    %n=1000;
     sigma = diag([20, 15, 10, 8, 6]);
     eps=1;
     x_bar = rand(p,1)*10;
@@ -26,7 +26,6 @@ for m = 10:10:40
     s=s/n;
     avg =  x_bar;
     avg = avg*m/p;
-    norm(avg-s)/norm(s)
+    nce = norm(avg-s)/norm(s);
 end
- 
  
