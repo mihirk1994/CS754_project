@@ -1,5 +1,5 @@
 for m = 10:10:40
-    P = @(M) M * inv(M' * M )* M';  
+    projection = @(M) M * inv(M' * M )* M';  
     
     p = 100;
     d=5;
