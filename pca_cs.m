@@ -1,3 +1,4 @@
+
     m=20
     projection = @(M) M * inv(M' * M )* M';  
     p = 100;
@@ -14,12 +15,13 @@
     X = Z + repmat(x_bar,1,n) + X_temp;
 
     %X = normrnd(0,1,p,n);
-    E = normrnd(0,1,p,m,n);
+    %E = normrnd(0,1,p,m,n);
+    E = double(rand(p,m,n)>0.5);
     E1 = normrnd(0,1,p,m);
     s=zeros(p,1);
     C = zeros(p);
     for i=1:n
-        px = (projection(E1)*X(:,i)); % CHANGED THIS!
+        px = (projection(E(:,:,i) )*X(:,i));
         s = s + px;
        
         %if (mod(i, 100) == 0)
@@ -29,7 +31,7 @@
     s=s/n;
     
     for i=1:n
-    px = (projection(E1)*(X(:,i) - x_bar));
+    px = (projection(E(:,:,i) )*(X(:,i) - x_bar));
     C = C + px * px';
     end
     C = C/n;
@@ -63,7 +65,7 @@
     end
     X_old = X;
     X = X - repmat(x_bar,1,n);
-    V_est = eigenvec(E1,X,d,n,p) ;
+    V_est = eigenvec(E,X,d,n,p) ;
     
     newdots=zeros(d,1);
     for i=1:d

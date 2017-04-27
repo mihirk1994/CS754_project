@@ -3,7 +3,7 @@ function vecmax = eigenvec(E,X,d,n,p)
     C = zeros(p);
     for l =1:d
         for i=1:n
-            px = projection(E(:,:) )*(X(:,i));
+            px = projection(E(:,:,i) )*(X(:,i));
             C = C + px * px';
         end
         C = C/n;

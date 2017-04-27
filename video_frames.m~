@@ -1,0 +1,45 @@
+path='Datasets/ProcessedVideo-0830am-0845am-Cam45/first-10-min.avi';
+[frame,rate] = generate_video_frame_vector(path);
+mean = sum(frame,3)/size(frame,3);
+[size1, size2] = size (imresize(frame(:,:,i),0.1))
+centreframe = zeros(size1 ,...
+    size2, size(frame,3));
+for i = 1:size(frame,3)
+    centreframe(:,:,i) = imresize(frame(:,:,i) - mean, 0.1);
+end
+
+centreframe2 = reshape(centreframe, ...
+size(centreframe,1)* size(centreframe,2), ...
+size(centreframe,3) );
+
+%%%%%%%%%%%%%%%%%%%%
+d= 100;
+m=100;
+p = size(centreframe2,1);
+n =  size(centreframe2,2);
+
+
+    for i=1:n
+    C = C + centreframe2(:,i)*(centreframe2(:,i))' * px';
+    end
+    C = C/n;
+
+
+[V_new , sig]= eig(C_data);
+[sig,perm] = sort(diag(sig), 'descend');
+V_new = V_new(:, perm);
+
+V_new= V_new(1:d,:);
+
+C= video_reconstruction(centreframe2,p,m,n,d);
+
+[V_rec , sig_rec]= eig(C);
+[sig_rec,perm] = sort(diag(sig_rec), 'descend');
+V_rec = V_rec(:, perm);
+
+V_rec= V_rec(1:d,:);
+
+newdots=zeros(d,1);
+for i=1:d
+  newdots(i) = dot(V_new(:,i),V_rec(:,i))/(norm( V_new(:,i))*norm( V_rec(:,i)));
+end
