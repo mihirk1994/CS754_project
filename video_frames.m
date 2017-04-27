@@ -1,14 +1,17 @@
-centreframe2 = zeros(41*92);
-for ind=1:1:10
-    path=strcat('Datasets/ProcessedVideo-0830am-0845am-Cam45/ten-min-',int2str(ind),'.avi');
+% centreframe2 = zeros(41*92);
+centreframe2 = zeros(24*32);
+for ind=1:1:1
+    path=strcat('ten-min-',int2str(ind),'.avi');
     path
     [frame,rate] = generate_video_frame_vector(path);
     mean = sum(frame,3)/size(frame,3);
-    [size1, size2] = size (imresize(frame(:,:,i),0.1))
+%     [size1, size2] = size (imresize(frame(:,:,1),0.1))
+    [size1, size2] = size (imresize(frame(:,:,1), [24 32]))
     centreframe = zeros(size1 ,...
         size2, size(frame,3));
     for i = 1:size(frame,3)
-        centreframe(:,:,i) = imresize(frame(:,:,i) - mean, 0.1);
+%         centreframe(:,:,i) = imresize(frame(:,:,i) - mean, 0.1);
+        centreframe(:,:,i) = imresize(frame(:,:,i) - mean, [24 32]);
     end
     centreframe2_temp = reshape(centreframe, ...
     size(centreframe,1)* size(centreframe,2), ...
@@ -16,8 +19,8 @@ for ind=1:1:10
     centreframe2 = cat(2, centreframe2, centreframe2_temp);
 end
 %%%%%%%%%%%%%%%%%%%%
-d= 5;
-m=100;
+d= 20;
+m=200;
 p = size(centreframe2,1);
 n =  size(centreframe2,2);
 C_data=zeros(p);

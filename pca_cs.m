@@ -1,15 +1,18 @@
 
-    m=20
+    
     projection = @(M) M * inv(M' * M )* M';  
+    
+    m = 20;
     p = 100;
-    d=5;
-    n=1000;
+    d = 5;
+    n = 1000;
+    % Generated the synthetic dataset
     sigma = diag([20, 15, 10, 8, 6]);
-    eps=1;
+    eps = 1;
     x_bar = rand(p,1)*10;
     V = normrnd(0,1,p,d);
     V_hat = V*sigma;
-    W= normrnd(0,1,d,n);
+    W = normrnd(0,1,d,n);
     X_temp = V_hat*W;
     Z = normrnd(0,eps*eps, p,n);
     X = Z + repmat(x_bar,1,n) + X_temp;
@@ -18,7 +21,7 @@
     %E = normrnd(0,1,p,m,n);
     E = double(rand(p,m,n)>0.5);
     E1 = normrnd(0,1,p,m);
-    s=zeros(p,1);
+    s = zeros(p,1);
     C = zeros(p);
     for i=1:n
         px = (projection(E(:,:,i) )*X(:,i));
@@ -42,6 +45,7 @@
     V_new = V_new(:, perm);
     avg =  x_bar;
     avg = avg*m/p;
+    avg = avg*p/m;
     err1 = norm(avg-s)/norm(avg);
     dotprods = zeros(d,1)
     for i=1:d
