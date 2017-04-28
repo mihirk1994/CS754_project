@@ -1,14 +1,17 @@
-centreframe2 = zeros(41*92,1);
+function ip = video_frames(m)
+
+% centreframe2 = zeros(41*92,1);
+centreframe2 = zeros(24*32,1);
 ind=1
-    path=strcat('Datasets/ProcessedVideo-0830am-0845am-Cam45/ten-min-',int2str(ind),'.avi');
+    path=strcat('ten-min-',int2str(ind),'.avi');
     path
     [frame,rate] = generate_video_frame_vector(path);
     mean = sum(frame,3)/size(frame,3);
-    [size1, size2] = size (imresize(frame(:,:,1),0.1))
+    [size1, size2] = size (imresize(frame(:,:,1),[24 32]))
     centreframe = zeros(size1 ,...
         size2, size(frame,3));
     for i = 1:size(frame,3)
-        centreframe(:,:,i) = imresize(frame(:,:,i) - mean, 0.1);
+        centreframe(:,:,i) = imresize(frame(:,:,i) - mean, [24 32]);
     end
     centreframe2_temp = reshape(centreframe, ...
     size(centreframe,1)* size(centreframe,2), ...
@@ -17,7 +20,7 @@ ind=1
 centreframe2 = centreframe2_temp ;
 %%%%%%%%%%%%%%%%%%%%
 d= 5;
-m=100;
+% m=100;
 p = size(centreframe2,1);
 n =  size(centreframe2,2);
 C_data=zeros(p);
@@ -45,4 +48,6 @@ V_rec= V_rec(1:d,:);
 newdots=zeros(d,1);
 for i=1:d
   newdots(i) = dot(V_new(:,i),V_rec(:,i))/(norm( V_new(:,i))*norm( V_rec(:,i)));
+end
+ip = newdots;
 end
