@@ -17,7 +17,7 @@ ind=1
 centreframe2 = centreframe2_temp ;
 %%%%%%%%%%%%%%%%%%%%
 d= 5;
-m=100;
+
 p = size(centreframe2,1);
 n =  size(centreframe2,2);
 C_data=zeros(p);
@@ -32,17 +32,40 @@ C_data = C_data/n;
 [sig,perm] = sort(diag(sig), 'descend');
 V_new = V_new(:, perm);
 
-V_new= V_new(1:d,:);
+V_new= V_new(:,1:d);
+newdots=zeros(d,4);
+for k = 1:1:4
 'video recon'
+m=k*500
 C= video_reconstruction(centreframe2,p,m,n,d);
 
 [V_rec , sig_rec]= eig(C);
 [sig_rec,perm] = sort(diag(sig_rec), 'descend');
 V_rec = V_rec(:, perm);
 
-V_rec= V_rec(1:d,:);
+V_rec= V_rec(:,1:d);
 'pre dot prod'
-newdots=zeros(d,1);
+
 for i=1:d
-  newdots(i) = dot(V_new(:,i),V_rec(:,i))/(norm( V_new(:,i))*norm( V_rec(:,i)));
+  newdots(i,k) = dot(V_new(:,i),V_rec(:,i))/(norm( V_new(:,i))*norm( V_rec(:,i)));
 end
+
+
+end
+ coeffs_rec = pinv(V_rec )*centreframe2;
+ video_reconstructed_rec = V_rec*coeffs_rec;
+ video_reconstructed_rec = reshape(video_reconstructed_rec,[41,92,599]);
+ %displayvideo(video_reconstructed_rec, 0);
+ 
+ coeffs_new = pinv(V_new )*centreframe2;
+ video_reconstructed_new = V_new*coeffs_new;
+  video_reconstructed_new = reshape(video_reconstructed_new,[41,92,599]);
+ %displayvideo(video_reconstructed_new, 0);
+ 
+ diffrec = centreframe - video_reconstructed_rec;
+ diffnew = centreframe - video_reconstructed_new;
+
+ newn = norm(sum(abs(diffnew),3))
+ newr = norm(sum(abs(diffrec),3))
+ den = norm ( sum(abs(centreframe),3) )
+ 

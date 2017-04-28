@@ -6,7 +6,7 @@ function C = video_reconstruction(X,p,m,n,d)
     %E = normrnd(0,1,p,m,n);
     C = zeros(p);
     for i=1:n
-    px = projection(double(rand(p,m)>0.5))*(X(:,i));
+    px = projection(normrnd(0,1,p,m))*(X(:,i));
     C = C + px * px';
     end
     C = C/n;

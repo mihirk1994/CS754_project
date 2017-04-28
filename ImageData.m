@@ -3,6 +3,7 @@ p=100;
 d=5;
 n=452;
 m=40;
+path = 
 arrData=load('arrhythmia.mat')
 arrData.X = (arrData.X)'
 arrData.X=arrData.X(1:p,:)
